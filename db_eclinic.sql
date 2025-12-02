@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 04:15 AM
+-- Generation Time: Dec 02, 2025 at 01:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -25,7 +25,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_input_resep` (IN `p_id_rm` INT, IN `p_id_obat` INT, IN `p_jumlah` INT)   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_input_resep` (IN `p_id_rm` INT, IN `p_id_obat` INT, IN `p_jumlah` INT, IN `p_aturan` VARCHAR(100))   BEGIN
     DECLARE v_stok INT;
     DECLARE v_harga DECIMAL(10,2);
     DECLARE v_subtotal DECIMAL(10,2);
@@ -41,17 +41,14 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_input_resep` (IN `p_id_rm` INT, 
         -- 3. Hitung Subtotal
         SET v_subtotal = v_harga * p_jumlah;
 
-        -- 4. Insert ke Detail Resep
-        INSERT INTO detail_resep (id_rm, id_obat, jumlah, subtotal) 
-        VALUES (p_id_rm, p_id_obat, p_jumlah, v_subtotal);
+        -- 4. Insert ke Detail Resep (Dengan Aturan Pakai)
+        INSERT INTO detail_resep (id_rm, id_obat, jumlah, aturan_pakai, subtotal) 
+        VALUES (p_id_rm, p_id_obat, p_jumlah, p_aturan, v_subtotal);
 
         SET v_pesan = 'Berhasil: Resep diinput dan stok dikurangi.';
-        
-        -- COMMIT (Implisit di MySQL kecuali dalam blok transaction eksplisit, tapi SP ini mensimulasikan logika bisnisnya)
     ELSE
         -- Stok Kurang
         SET v_pesan = 'Gagal: Stok obat tidak mencukupi.';
-        -- ROLLBACK (Tidak bisa rollback insert RM dari sini jika RM ada di luar SP, tapi kita kirim sinyal error)
     END IF;
 
     -- Kembalikan Pesan Status
@@ -71,8 +68,20 @@ CREATE TABLE `detail_resep` (
   `id_rm` int(11) NOT NULL,
   `id_obat` int(11) NOT NULL,
   `jumlah` int(11) NOT NULL,
+  `aturan_pakai` varchar(100) DEFAULT NULL,
   `subtotal` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `detail_resep`
+--
+
+INSERT INTO `detail_resep` (`id_resep`, `id_rm`, `id_obat`, `jumlah`, `aturan_pakai`, `subtotal`) VALUES
+(3, 3, 1, 10, '3x1 sesudah makan', 50000.00),
+(4, 3, 3, 6, '1x1', 12000.00),
+(5, 4, 2, 10, '3x1 Wajib Dihabiskan', 120000.00),
+(6, 4, 3, 6, '1x1', 12000.00),
+(7, 5, 1, 10, '3x1 bila nyeri', 50000.00);
 
 -- --------------------------------------------------------
 
@@ -85,7 +94,7 @@ CREATE TABLE `dokter` (
   `id_user` int(11) NOT NULL,
   `nama_dokter` varchar(100) NOT NULL,
   `spesialisasi` varchar(50) DEFAULT NULL,
-  `no_hp` varchar(15) DEFAULT NULL,
+  `no_hp` varchar(50) DEFAULT NULL,
   `id_poli` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -118,9 +127,9 @@ CREATE TABLE `obat` (
 --
 
 INSERT INTO `obat` (`id_obat`, `nama_obat`, `jenis`, `stok`, `harga`, `satuan`, `foto`) VALUES
-(1, 'Paracetamol 500mg', 'Tablet', 120, 5000.00, 'Strip', '1764636358_Paracetamol_500mg.png'),
-(2, 'Amoxicillin 500mg Hexpharm', 'Tablet', 45, 12000.00, 'Strip', '1764635451_Amoxicillin_500mg.jpg'),
-(3, 'Vitacimin Lemon 500mg', 'Tablet Hisap', 200, 2000.00, 'Strip', '1764638460_Vitacimin_lemon_500mg.png'),
+(1, 'Paracetamol 500mg', 'Tablet', 100, 5000.00, 'Strip', '1764636358_Paracetamol_500mg.png'),
+(2, 'Amoxicillin 500mg Hexpharm', 'Tablet', 35, 12000.00, 'Strip', '1764635451_Amoxicillin_500mg.jpg'),
+(3, 'Vitacimin Lemon 500mg', 'Tablet Hisap', 188, 2000.00, 'Strip', '1764638460_Vitacimin_lemon_500mg.png'),
 (4, 'Cataflam 25mg', 'Kaplet', 8, 45800.00, 'Strip', '1764631267_Cataflam_25mg.jpg');
 
 -- --------------------------------------------------------
@@ -136,9 +145,19 @@ CREATE TABLE `pasien` (
   `tgl_lahir` date NOT NULL,
   `jenis_kelamin` enum('L','P') NOT NULL,
   `alamat` text DEFAULT NULL,
-  `no_hp` varchar(15) DEFAULT NULL,
+  `no_hp` varchar(50) DEFAULT NULL,
   `tgl_daftar` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pasien`
+--
+
+INSERT INTO `pasien` (`id_pasien`, `nik`, `nama_pasien`, `tgl_lahir`, `jenis_kelamin`, `alamat`, `no_hp`, `tgl_daftar`) VALUES
+(3, '3171012005850001', 'Budi Santosoo', '1985-05-20', 'L', 'Jl. Merdeka No. 45, Jakarta Pusat', '081234567890', '2025-12-02 10:21:47'),
+(5, '3273015510920002', 'Siti Aminah', '1992-10-15', 'P', 'Perumahan Griya Indah Blok A3, Bandung', '085678901234', '2025-12-02 10:24:57'),
+(6, '3301011001550003', 'H. Ahmad Dahlan', '1955-01-10', 'L', 'Jl. Jendral Sudirman Kav. 5, Surabaya', '081122334455', '2025-12-02 10:25:50'),
+(7, '3603016012150004', 'Anisa Putri', '2015-12-20', 'P', 'Jl. Melati No. 12, Tangerang Selatan', '081987654321 (Nomor Orang Tua)', '2025-12-02 10:26:28');
 
 -- --------------------------------------------------------
 
@@ -154,6 +173,16 @@ CREATE TABLE `pendaftaran` (
   `status` enum('Menunggu','Diperiksa','Selesai','Batal') DEFAULT 'Menunggu',
   `keluhan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pendaftaran`
+--
+
+INSERT INTO `pendaftaran` (`id_daftar`, `id_pasien`, `id_dokter`, `tgl_kunjungan`, `status`, `keluhan`) VALUES
+(4, 3, 3, '2025-12-02 11:22:46', 'Selesai', 'Demam tinggi sejak 2 hari lalu, pusing, dan badan menggigil.'),
+(5, 5, 4, '2025-12-02 11:23:27', 'Selesai', 'Gigi geraham kanan bawah sakit berdenyut, gusi bengkak.'),
+(6, 5, 4, '2025-12-02 12:15:57', 'Selesai', 'Sakit gigi kambuh lagi setelah obat habis, bengkak sudah berkurang tapi masih nyeri saat mengunyah.'),
+(7, 3, 3, '2025-12-02 17:23:05', 'Menunggu', 'Nyeri ulu hati, perut kembung, dan mual sejak semalam.');
 
 -- --------------------------------------------------------
 
@@ -199,7 +228,10 @@ CREATE TABLE `rekam_medis` (
 
 INSERT INTO `rekam_medis` (`id_rm`, `id_daftar`, `tgl_periksa`, `diagnosa`, `tindakan`) VALUES
 (1, 1, '2025-11-25 11:47:11', 'Gigi beneran bagoyang', 'Cabut gigi'),
-(2, 3, '2025-11-25 12:14:45', 'Bagoyang sendiri dah geser', 'Kretek + obat');
+(2, 3, '2025-11-25 12:14:45', 'Bagoyang sendiri dah geser', 'Kretek + obat'),
+(3, 4, '2025-12-02 12:02:54', 'Febris (Demam) dan Cephalgia (Sakit Kepala) suspect Viral Infection.', 'Pemeriksaan Tanda Vital (Tensi: 120/80 mmHg, Suhu: 38.5°C). Kompres hangat dan edukasi perbanyak minum air putih.'),
+(4, 5, '2025-12-02 12:13:29', 'Pulpitis Akut pada gigi 46 (Geraham Kanan Bawah) disertai Gingivitis (Radang Gusi).', 'Pemeriksaan Intraoral, Pembersihan area gigi yang sakit (Scaling ringan), dan pemberian obat untuk meredakan peradangan sebelum tindakan cabut/tambal lanjutan.'),
+(5, 6, '2025-12-02 12:19:40', 'Pulpitis Irreversibel (Lanjutan). Siap untuk tindakan perawatan saluran akar.', 'Devitalisasi Pulpa (Mematikan saraf gigi) dan Tambalan Sementara. Pasien diminta kembali 1 minggu lagi.');
 
 -- --------------------------------------------------------
 
@@ -319,7 +351,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `detail_resep`
 --
 ALTER TABLE `detail_resep`
-  MODIFY `id_resep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_resep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `dokter`
@@ -337,13 +369,13 @@ ALTER TABLE `obat`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id_pasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pasien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_daftar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_daftar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `poli`
@@ -355,7 +387,7 @@ ALTER TABLE `poli`
 -- AUTO_INCREMENT for table `rekam_medis`
 --
 ALTER TABLE `rekam_medis`
-  MODIFY `id_rm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_rm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

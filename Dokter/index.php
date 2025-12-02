@@ -20,6 +20,9 @@ $id_dokter = $d_doc['id_dokter'];
             <p class="mb-0 opacity-75">Selamat bekerja, <strong><?= $_SESSION['nama'] ?></strong></p>
         </div>
         <div class="d-flex align-items-center gap-3">
+            <a href="riwayat_pasien.php" class="btn btn-info text-white rounded-pill shadow-sm">
+                <i class="fas fa-book-medical me-2"></i>Database Pasien
+            </a>
             <a href="../index.php?page=home" class="btn btn-outline-primary rounded-pill btn-back">
                 <i class="fas fa-arrow-left me-2"></i>Ke Halaman Depan
             </a>
