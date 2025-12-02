@@ -33,6 +33,35 @@ include $path_prefix . 'layout/header.php';
             </div>
         </div>
     </div>
+
+    <!-- Katalog Obat Section -->
+    <div class="mt-5">
+        <h3 class="fw-bold text-success mb-4 border-bottom pb-2">Katalog Obat Tersedia</h3>
+        <div class="row g-4">
+            <?php
+            $q_obat = mysqli_query($conn, "SELECT * FROM obat ORDER BY nama_obat ASC");
+            if(mysqli_num_rows($q_obat) > 0){
+                while($o = mysqli_fetch_assoc($q_obat)){
+                    $foto = !empty($o['foto']) ? '../assets/img/obat/'.$o['foto'] : '../assets/img/obat/default.png';
+            ?>
+            <div class="col-md-3 col-6">
+                <div class="card h-100 shadow-sm border-0 hover-scale">
+                    <img src="<?= $foto ?>" class="card-img-top" alt="<?= $o['nama_obat'] ?>" style="height: 150px; object-fit: cover;" onerror="this.onerror=null; this.src='https://via.placeholder.com/150?text=No+Img'">
+                    <div class="card-body text-center">
+                        <h6 class="fw-bold text-dark mb-1"><?= $o['nama_obat'] ?></h6>
+                        <span class="badge bg-light text-secondary border"><?= $o['jenis'] ?></span>
+                        <p class="text-success fw-bold mt-2 mb-0">Rp <?= number_format($o['harga']) ?></p>
+                    </div>
+                </div>
+            </div>
+            <?php 
+                }
+            } else {
+                echo "<div class='col-12 text-center text-muted py-5'>Belum ada data obat yang ditampilkan.</div>";
+            }
+            ?>
+        </div>
+    </div>
 </div>
 
 <?php include $path_prefix . 'layout/footer.php'; ?>

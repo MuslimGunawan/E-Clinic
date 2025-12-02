@@ -20,11 +20,17 @@ include $path . 'config/koneksi.php';
 <!-- Navbar Fixed Top agar melayang -->
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
   <div class="container">
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= $path ?>index.php?page=home">
         <img src="<?= $path ?>assets/img/E-Clinic_Logo.png" alt="Logo" height="40" class="me-2">
         E-CLINIC
-        <?php if(isset($_SESSION['role'])): ?>
-            <span class="badge bg-light text-primary ms-3 small text-uppercase" style="font-size: 0.7rem;">
+        <?php if(isset($_SESSION['role'])): 
+            $role_badge = 'bg-sky-solid text-white';
+            if($_SESSION['role'] == 'admin') $role_badge = 'bg-danger text-white';
+            if($_SESSION['role'] == 'dokter') $role_badge = 'bg-sky-solid text-white';
+            if($_SESSION['role'] == 'resepsionis') $role_badge = 'bg-success text-white';
+            if($_SESSION['role'] == 'apoteker') $role_badge = 'bg-warning text-dark';
+        ?>
+            <span class="badge <?= $role_badge ?> ms-3 small text-uppercase" style="font-size: 0.7rem;">
                 <i class="fas fa-user-circle me-1"></i> <?= $_SESSION['role'] ?>
             </span>
         <?php endif; ?>
@@ -42,9 +48,20 @@ include $path . 'config/koneksi.php';
                     Selamat Datang, <strong><?= $_SESSION['nama'] ?></strong>
                 </span>
             </li>
+            <li class="nav-item me-2">
+                <a class="btn btn-light btn-sm fw-bold px-3 rounded-pill shadow-sm text-primary" href="<?= $path . $_SESSION['role'] ?>/">
+                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="btn btn-warning btn-sm fw-bold px-4 rounded-pill shadow-sm" href="<?= $path ?>auth/logout.php">
                     <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
+            </li>
+        <?php else: ?>
+            <li class="nav-item">
+                <a class="btn btn-light text-primary fw-bold px-4 rounded-pill shadow-sm" href="<?= $path ?>auth/login.php">
+                    <i class="fas fa-sign-in-alt me-1"></i> Login Petugas
                 </a>
             </li>
         <?php endif; ?>

@@ -30,7 +30,7 @@ if (isset($_GET['del'])) {
 <div class="container mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-primary mb-0"><i class="fas fa-clinic-medical me-2"></i>Data Poliklinik</h3>
-        <a href="index.php" class="btn btn-secondary rounded-pill btn-back">
+        <a href="index.php" class="btn btn-secondary rounded-pill px-4 shadow-sm">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>
@@ -96,21 +96,21 @@ if (isset($_GET['del'])) {
                                 $doc_count = count($doc_list);
                             ?>
                             <tr>
-                                <td class="ps-4 text-muted"><?= $no++ ?></td>
-                                <td class="fw-bold text-primary"><?= $r['nama_poli'] ?></td>
-                                <td><span class="badge bg-light text-dark border"><i class="fas fa-map-pin me-1 text-danger"></i> <?= $r['lokasi_ruangan'] ?></span></td>
-                                <td>
+                                <td class="ps-4 text-muted" data-label="No"><?= $no++ ?></td>
+                                <td class="fw-bold text-primary" data-label="Nama Poli"><?= $r['nama_poli'] ?></td>
+                                <td data-label="Lokasi"><span class="badge bg-light text-dark border"><i class="fas fa-map-pin me-1 text-danger"></i> <?= $r['lokasi_ruangan'] ?></span></td>
+                                <td data-label="Dokter Bertugas">
                                     <?php if($doc_count > 0): ?>
                                         <div class="d-flex flex-column">
                                             <?php foreach($doc_list as $doc_name): ?>
-                                                <small class="text-muted"><i class="fas fa-user-md me-1 text-success"></i><?= $doc_name ?></small>
+                                                <small class="text-muted"><i class="fas fa-user-md me-1 text-primary"></i><?= $doc_name ?></small>
                                             <?php endforeach; ?>
                                         </div>
                                     <?php else: ?>
                                         <span class="badge bg-secondary bg-opacity-10 text-secondary">Kosong</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="text-end pe-4">
+                                <td class="text-end pe-4" data-label="Aksi">
                                     <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $r['id_poli'] ?>">
                                         <i class="fas fa-edit"></i>
                                     </button>

@@ -33,12 +33,14 @@ if (isset($_POST['login'])) {
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login E-Clinic</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/style.css" rel="stylesheet">
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card shadow p-4" style="width: 400px; border-radius: 15px;">
+<body class="d-flex justify-content-center align-items-center vh-100 login-body">
+    <div class="glass-panel p-4 login-card">
         <div class="text-center mb-4">
             <h3 class="text-primary fw-bold">LOGIN SYSTEM</h3>
             <p class="text-muted">Silakan masuk untuk memulai</p>

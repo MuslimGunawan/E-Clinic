@@ -108,8 +108,8 @@ if (isset($_GET['del'])) {
 <div class="container mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-primary"><i class="fas fa-users-cog me-2"></i>Manajemen Users</h3>
-        <div>
-            <a href="index.php" class="btn btn-secondary rounded-pill btn-back me-2">
+        <div class="d-flex gap-2">
+            <a href="index.php" class="btn btn-secondary rounded-pill px-4 shadow-sm">
                 <i class="fas fa-arrow-left me-2"></i>Kembali
             </a>
             <button class="btn btn-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAdd">
@@ -142,15 +142,15 @@ if (isset($_GET['del'])) {
                     while($r = mysqli_fetch_assoc($q)):
                     ?>
                     <tr>
-                        <td class="ps-4"><?= $no++ ?></td>
-                        <td class="fw-bold">
+                        <td class="ps-4" data-label="No"><?= $no++ ?></td>
+                        <td class="fw-bold" data-label="Nama Lengkap">
                             <?= $r['nama_lengkap'] ?>
                             <?php if($r['role'] == 'dokter'): ?>
                                 <br><small class="text-muted"><i class="fas fa-stethoscope me-1"></i><?= $r['no_hp'] ?? '-' ?></small>
                             <?php endif; ?>
                         </td>
-                        <td class="text-muted">@<?= $r['username'] ?></td>
-                        <td>
+                        <td class="text-muted" data-label="Username">@<?= $r['username'] ?></td>
+                        <td data-label="Role">
                             <?php 
                                 $badge = 'bg-secondary';
                                 if($r['role']=='admin') $badge='bg-danger';
@@ -160,7 +160,7 @@ if (isset($_GET['del'])) {
                             ?>
                             <span class="badge <?= $badge ?> rounded-pill px-3"><?= strtoupper($r['role']) ?></span>
                         </td>
-                        <td class="text-end pe-4">
+                        <td class="text-end pe-4" data-label="Aksi">
                             <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $r['id_user'] ?>">
                                 <i class="fas fa-edit"></i>
                             </button>

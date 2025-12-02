@@ -65,7 +65,7 @@ if (isset($_POST['simpan_periksa'])) {
 <div class="container mb-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold text-primary"><i class="fas fa-stethoscope me-2"></i>Pemeriksaan Medis</h3>
-        <a href="index.php" class="btn btn-secondary rounded-pill btn-back px-3">
+        <a href="index.php" class="btn btn-secondary rounded-pill px-4 shadow-sm">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>

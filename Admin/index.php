@@ -31,8 +31,8 @@ if ($_SESSION['role'] !== 'admin') {
         <div class="col-md-3">
             <div class="card h-100 p-3 glass-card">
                 <div class="d-flex align-items-center">
-                    <div class="icon-shape bg-primary bg-opacity-10 text-primary rounded-3 p-3">
-                        <i class="fas fa-users fa-2x"></i>
+                    <div class="icon-shape text-primary p-3">
+                        <i class="fas fa-users fa-3x"></i>
                     </div>
                     <div class="ms-3">
                         <p class="text-muted mb-0 small text-uppercase fw-bold">Total Users</p>
@@ -46,8 +46,8 @@ if ($_SESSION['role'] !== 'admin') {
         <div class="col-md-3">
             <div class="card h-100 p-3 glass-card">
                 <div class="d-flex align-items-center">
-                    <div class="icon-shape bg-success bg-opacity-10 text-success rounded-3 p-3">
-                        <i class="fas fa-user-md fa-2x"></i>
+                    <div class="icon-shape text-primary p-3">
+                        <i class="fas fa-user-md fa-3x"></i>
                     </div>
                     <div class="ms-3">
                         <p class="text-muted mb-0 small text-uppercase fw-bold">Dokter</p>
@@ -59,10 +59,10 @@ if ($_SESSION['role'] !== 'admin') {
         </div>
         <!-- Card Poli -->
         <div class="col-md-3">
-            <div class="card h-100 p-3">
+            <div class="card h-100 p-3 glass-card">
                 <div class="d-flex align-items-center">
-                    <div class="icon-shape bg-warning bg-opacity-10 text-warning rounded-3 p-3">
-                        <i class="fas fa-clinic-medical fa-2x"></i>
+                    <div class="icon-shape text-warning p-3">
+                        <i class="fas fa-clinic-medical fa-3x"></i>
                     </div>
                     <div class="ms-3">
                         <p class="text-muted mb-0 small text-uppercase fw-bold">Poliklinik</p>
@@ -74,10 +74,10 @@ if ($_SESSION['role'] !== 'admin') {
         </div>
         <!-- Card Pasien -->
         <div class="col-md-3">
-            <div class="card h-100 p-3">
+            <div class="card h-100 p-3 glass-card">
                 <div class="d-flex align-items-center">
-                    <div class="icon-shape bg-danger bg-opacity-10 text-danger rounded-3 p-3">
-                        <i class="fas fa-procedures fa-2x"></i>
+                    <div class="icon-shape text-danger p-3">
+                        <i class="fas fa-procedures fa-3x"></i>
                     </div>
                     <div class="ms-3">
                         <p class="text-muted mb-0 small text-uppercase fw-bold">Pasien</p>

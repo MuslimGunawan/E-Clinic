@@ -28,26 +28,23 @@ include 'layout/header.php';
 ?>
 
 <!-- Hero Section -->
-<header class="hero-section position-relative overflow-hidden text-white" style="background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%); padding-top: 120px; padding-bottom: 100px;">
-    <!-- Decorative Shapes -->
-    <div class="position-absolute top-0 start-0 translate-middle rounded-circle bg-white opacity-10" style="width: 400px; height: 400px; filter: blur(80px);"></div>
-    <div class="position-absolute bottom-0 end-0 translate-middle rounded-circle bg-warning opacity-10" style="width: 300px; height: 300px; filter: blur(60px);"></div>
+<header class="hero-section position-relative overflow-hidden" style="padding-top: 120px; padding-bottom: 100px;">
     
     <div class="container position-relative z-index-1 text-center">
-        <span class="badge bg-white bg-opacity-25 rounded-pill px-4 py-2 mb-4 backdrop-blur border border-white border-opacity-25 shadow-sm">
+        <span class="badge bg-white bg-opacity-25 rounded-pill px-4 py-2 mb-4 backdrop-blur border border-white border-opacity-25 shadow-sm fw-bold text-white">
             <i class="fas fa-star text-warning me-2"></i>Sistem Informasi Klinik Terpadu
         </span>
-        <h1 class="display-3 fw-bold mb-3 text-shadow">Kesehatan Anda,<br>Prioritas Kami</h1>
-        <p class="lead fs-5 mb-5 text-white-50 mx-auto" style="max-width: 700px;">
+        <h1 class="display-3 fw-bold mb-3 text-white">Kesehatan Anda,<br>Prioritas Kami</h1>
+        <p class="lead fs-5 mb-5 text-white mx-auto" style="max-width: 700px;">
             Platform E-Clinic memudahkan Anda dalam mengakses jadwal dokter, informasi layanan, dan pendaftaran yang lebih efisien.
         </p>
         
         <div class="d-flex justify-content-center gap-3">
-            <a href="#jadwal" class="btn btn-light btn-lg text-primary fw-bold px-5 shadow-lg rounded-pill hover-scale">
-                <i class="far fa-calendar-alt me-2"></i>Cek Jadwal
+            <a href="cek_riwayat.php" class="btn btn-light btn-lg fw-bold px-5 shadow-lg rounded-pill hover-scale text-primary">
+                <i class="fas fa-history me-2"></i>Cek Riwayat
             </a>
-            <a href="auth/login.php" class="btn btn-outline-light btn-lg fw-bold px-5 rounded-pill backdrop-blur hover-scale border-2">
-                <i class="fas fa-sign-in-alt me-2"></i>Login Petugas
+            <a href="#jadwal" class="btn btn-outline-light btn-lg fw-bold px-5 rounded-pill backdrop-blur hover-scale border-2">
+                <i class="far fa-calendar-alt me-2"></i>Cek Jadwal
             </a>
         </div>
     </div>
@@ -57,29 +54,108 @@ include 'layout/header.php';
 <div class="container position-relative z-index-2 mt-n5">
     <div class="row g-3 justify-content-center">
         <div class="col-md-3 col-12">
-            <div class="glass-card p-3 text-center h-100 d-flex align-items-center justify-content-center">
-                <i class="fas fa-user-md fa-2x text-primary me-3"></i>
+            <div class="glass-card p-4 text-center h-100 d-flex align-items-center justify-content-center shadow-lg">
+                <i class="fas fa-user-md fa-3x text-primary me-3" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"></i>
                 <div class="text-start">
-                    <h3 class="fw-bold mb-0">15+</h3>
-                    <small class="text-muted">Dokter Spesialis</small>
+                    <?php 
+                    // Query Menghitung Jumlah Dokter Aktif
+                    $q_doc = mysqli_query($conn, "SELECT COUNT(*) as total FROM dokter");
+                    $d_doc = mysqli_fetch_assoc($q_doc);
+                    ?>
+                    <h3 class="fw-bold mb-0 text-dark"><?= $d_doc['total'] ?></h3>
+                    <small class="text-muted fw-bold">Dokter Tersedia</small>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3 col-12">
-            <div class="glass-card p-3 text-center h-100 d-flex align-items-center justify-content-center">
-                <i class="fas fa-users fa-2x text-success me-3"></i>
+            <div class="glass-card p-4 text-center h-100 d-flex align-items-center justify-content-center shadow-lg">
+                <i class="fas fa-users fa-3x text-success me-3" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"></i>
                 <div class="text-start">
-                    <h3 class="fw-bold mb-0">5k+</h3>
-                    <small class="text-muted">Pasien Terlayani</small>
+                    <?php 
+                    // Query Menghitung Jumlah Pasien Terdaftar
+                    $q_pas = mysqli_query($conn, "SELECT COUNT(*) as total FROM pasien");
+                    $d_pas = mysqli_fetch_assoc($q_pas);
+                    ?>
+                    <h3 class="fw-bold mb-0 text-dark"><?= $d_pas['total'] ?></h3>
+                    <small class="text-muted fw-bold">Pasien Terdaftar</small>
                 </div>
             </div>
         </div>
+
         <div class="col-md-3 col-12">
-            <div class="glass-card p-3 text-center h-100 d-flex align-items-center justify-content-center">
-                <i class="fas fa-clock fa-2x text-danger me-3"></i>
+            <div class="glass-card p-4 text-center h-100 d-flex align-items-center justify-content-center shadow-lg">
+                <i class="fas fa-hospital fa-3x text-danger me-3" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));"></i>
                 <div class="text-start">
-                    <h3 class="fw-bold mb-0">24/7</h3>
-                    <small class="text-muted">Layanan IGD</small>
+                    <?php 
+                    // Query Menghitung Jumlah Poli
+                    $q_pol = mysqli_query($conn, "SELECT COUNT(*) as total FROM poli");
+                    $d_pol = mysqli_fetch_assoc($q_pol);
+                    ?>
+                    <h3 class="fw-bold mb-0 text-dark"><?= $d_pol['total'] ?></h3>
+                    <small class="text-muted fw-bold">Layanan Poli</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tata Cara Section -->
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5">
+        <h5 class="text-primary fw-bold text-uppercase ls-2">Alur Pelayanan</h5>
+        <h2 class="fw-bold display-6">Mudah & Cepat</h2>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="glass-step h-100 text-center">
+                <div class="step-number">1</div>
+                <div class="position-relative z-index-1">
+                    <div class="mb-4">
+                        <i class="fas fa-calendar-check fa-3x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Cek Jadwal</h4>
+                    <p class="text-muted mb-0">Lihat jadwal dokter yang tersedia melalui website ini sebelum datang ke klinik.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="glass-step h-100 text-center">
+                <div class="step-number">2</div>
+                <div class="position-relative z-index-1">
+                    <div class="mb-4">
+                        <i class="fas fa-user-edit fa-3x text-info"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Daftar</h4>
+                    <p class="text-muted mb-0">Datang ke bagian resepsionis untuk melakukan pendaftaran dan pengambilan nomor antrian.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="glass-step h-100 text-center">
+                <div class="step-number">3</div>
+                <div class="position-relative z-index-1">
+                    <div class="mb-4">
+                        <i class="fas fa-stethoscope fa-3x text-warning"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Periksa</h4>
+                    <p class="text-muted mb-0">Menunggu panggilan di ruang tunggu dan melakukan pemeriksaan dengan dokter.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="glass-step h-100 text-center">
+                <div class="step-number">4</div>
+                <div class="position-relative z-index-1">
+                    <div class="mb-4">
+                        <i class="fas fa-pills fa-3x text-success"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Obat</h4>
+                    <p class="text-muted mb-0">Menebus resep obat di bagian farmasi dan menyelesaikan administrasi.</p>
                 </div>
             </div>
         </div>
@@ -98,7 +174,7 @@ include 'layout/header.php';
         </div>
     </div>
 
-    <div class="glass-panel overflow-hidden" style="background: rgba(255, 255, 255, 0.5);">
+    <div class="glass-panel overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0 align-middle">
@@ -121,8 +197,8 @@ include 'layout/header.php';
                                 echo "<tr>
                                     <td class='fw-bold text-dark ps-5 py-3' data-label='Nama Dokter'>
                                         <div class='d-flex align-items-center'>
-                                            <div class='icon-shape bg-primary bg-opacity-10 text-primary rounded-circle me-3 p-2'>
-                                                <i class='fas fa-user-md'></i>
+                                            <div class='icon-shape text-primary me-3 p-2'>
+                                                <i class='fas fa-user-md fa-2x'></i>
                                             </div>
                                             {$row['nama_dokter']}
                                         </div>
@@ -162,9 +238,7 @@ include 'layout/header.php';
             <div class="col-md-4">
                 <div class="glass-card h-100 p-4 text-center">
                     <div class="mb-4 mt-3">
-                        <div class="icon-shape bg-primary text-white rounded-circle mx-auto shadow-lg" style="width: 80px; height: 80px; font-size: 2rem; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-stethoscope"></i>
-                        </div>
+                        <i class="fas fa-stethoscope fa-4x text-primary"></i>
                     </div>
                     <h4 class="fw-bold">Poli Umum</h4>
                     <p class="text-muted mb-4">Pemeriksaan kesehatan menyeluruh untuk dewasa dan anak-anak dengan penanganan dokter umum.</p>
@@ -176,9 +250,7 @@ include 'layout/header.php';
             <div class="col-md-4">
                 <div class="glass-card h-100 p-4 text-center">
                     <div class="mb-4 mt-3">
-                        <div class="icon-shape bg-warning text-white rounded-circle mx-auto shadow-lg" style="width: 80px; height: 80px; font-size: 2rem; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-tooth"></i>
-                        </div>
+                        <i class="fas fa-tooth fa-4x text-warning"></i>
                     </div>
                     <h4 class="fw-bold">Poli Gigi</h4>
                     <p class="text-muted mb-4">Layanan kesehatan gigi dan mulut profesional, mulai dari pembersihan karang hingga perawatan.</p>
@@ -190,9 +262,7 @@ include 'layout/header.php';
             <div class="col-md-4">
                 <div class="glass-card h-100 p-4 text-center">
                     <div class="mb-4 mt-3">
-                        <div class="icon-shape bg-info text-white rounded-circle mx-auto shadow-lg" style="width: 80px; height: 80px; font-size: 2rem; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-baby"></i>
-                        </div>
+                        <i class="fas fa-baby fa-4x text-info"></i>
                     </div>
                     <h4 class="fw-bold">Poli Anak</h4>
                     <p class="text-muted mb-4">Layanan kesehatan khusus untuk tumbuh kembang anak dan imunisasi lengkap.</p>
@@ -204,9 +274,7 @@ include 'layout/header.php';
             <div class="col-md-4">
                 <div class="glass-card h-100 p-4 text-center">
                     <div class="mb-4 mt-3">
-                        <div class="icon-shape bg-danger text-white rounded-circle mx-auto shadow-lg" style="width: 80px; height: 80px; font-size: 2rem; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-female"></i>
-                        </div>
+                        <i class="fas fa-female fa-4x text-danger"></i>
                     </div>
                     <h4 class="fw-bold">Poli Kandungan</h4>
                     <p class="text-muted mb-4">Pemeriksaan kehamilan (ANC), USG, dan kesehatan reproduksi wanita.</p>
@@ -218,9 +286,7 @@ include 'layout/header.php';
             <div class="col-md-4">
                 <div class="glass-card h-100 p-4 text-center">
                     <div class="mb-4 mt-3">
-                        <div class="icon-shape bg-primary bg-gradient text-white rounded-circle mx-auto shadow-lg" style="width: 80px; height: 80px; font-size: 2rem; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-heartbeat"></i>
-                        </div>
+                        <i class="fas fa-heartbeat fa-4x text-primary"></i>
                     </div>
                     <h4 class="fw-bold">Poli Penyakit Dalam</h4>
                     <p class="text-muted mb-4">Konsultasi dan penanganan penyakit organ dalam untuk dewasa dan lansia.</p>
@@ -232,9 +298,7 @@ include 'layout/header.php';
             <div class="col-md-4">
                 <div class="glass-card h-100 p-4 text-center">
                     <div class="mb-4 mt-3">
-                        <div class="icon-shape bg-success text-white rounded-circle mx-auto shadow-lg" style="width: 80px; height: 80px; font-size: 2rem; display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-pills"></i>
-                        </div>
+                        <i class="fas fa-pills fa-4x text-success"></i>
                     </div>
                     <h4 class="fw-bold">Instalasi Farmasi</h4>
                     <p class="text-muted mb-4">Apotek lengkap dengan apoteker bersertifikat. Obat berkualitas dan terjangkau.</p>

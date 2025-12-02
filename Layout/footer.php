@@ -26,6 +26,30 @@
         } else {
             document.getElementById('mainNavbar').classList.add('bg-primary');
         }
+
+        // Fitur Pencarian Cepat Tabel (Client Side)
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.createElement("input");
+    searchInput.setAttribute("type", "text");
+    searchInput.setAttribute("placeholder", "Cari dokter atau poli...");
+    searchInput.classList.add("form-control", "mb-3", "shadow-sm");
+    
+    // Cari tabel jadwal dokter
+    const tableContainer = document.querySelector("#jadwal .glass-panel .card-body");
+    if(tableContainer) {
+        tableContainer.insertBefore(searchInput, tableContainer.firstChild);
+        
+        searchInput.addEventListener("keyup", function() {
+            const value = this.value.toLowerCase();
+            const rows = document.querySelectorAll("#jadwal table tbody tr");
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.indexOf(value) > -1 ? "" : "none";
+            });
+        });
+    }
+});
     </script>
 </body>
 </html>
